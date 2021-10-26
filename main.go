@@ -28,7 +28,7 @@ func main() {
 	escapedTitle := strings.Replace(title, " ", "_", -1)
 
 	response, err := http.Get(fmt.Sprintf("https://en.wikipedia.org/w/api.php?action=parse&section=0&prop=text&format=json&page=%s", escapedTitle))
-	if err != nil {
+	if err != nil || response.StatusCode < 200 || response.StatusCode > 299 {
 		log.Println(err)
 		return
 	}
@@ -38,9 +38,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 		return
-	}
-	if response.StatusCode < 200 || response.StatusCode > 299 {
-		log.Println(response.StatusCode)
 	}
 
 	var responseBody WikipediaResponse
